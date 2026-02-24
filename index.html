@@ -3,66 +3,847 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Board2Often | Modern Board Games & TCG</title>
-  <meta name="description" content="Board2Often is a modern tabletop retailer focused on board games and trading card games in Kelowna, BC." />
-  <link rel="stylesheet" href="styles.css" />
+  <title>Board2Often – Board Games & TCGs Across Canada</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #1e2d3d;
+      --navy-dark: #141e2a;
+      --navy-mid: #263648;
+      --slate: #4a6080;
+      --slate-light: #6b87a8;
+      --cream: #f5f0e8;
+      --white: #ffffff;
+      --accent: #c8a96e;
+      --accent-light: #e0c99a;
+      --text-muted: #8fa5bc;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--navy-dark);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 3rem;
+      background: rgba(20, 30, 42, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-dice {
+      width: 36px;
+      height: 36px;
+      background: var(--slate);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .nav-dice::before,
+    .nav-dice::after {
+      content: '';
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      background: var(--white);
+      border-radius: 50%;
+    }
+
+    .nav-dice::before { top: 8px; right: 8px; }
+    .nav-dice::after  { bottom: 8px; left: 8px; }
+
+    .nav-wordmark {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1.2rem;
+      color: var(--white);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    .nav-links .coming-soon {
+      color: var(--slate-light);
+      font-size: 0.7rem;
+      vertical-align: super;
+      margin-left: 3px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(74,96,128,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(200,169,110,0.06) 0%, transparent 60%);
+    }
+
+    /* subtle grid texture */
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(200,169,110,0.12);
+      border: 1px solid rgba(200,169,110,0.3);
+      color: var(--accent-light);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 2rem;
+      position: relative;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .hero-badge::before {
+      content: '🍁';
+      font-size: 0.9rem;
+    }
+
+    .hero-title {
+      font-family: 'Archivo Black', sans-serif;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      position: relative;
+      animation: fadeUp 0.8s 0.1s ease both;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.1em;
+    }
+
+    .hero-pre {
+      font-size: clamp(3rem, 9vw, 7rem);
+      color: var(--white);
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .hero-brand {
+      font-size: clamp(3.5rem, 11vw, 8rem);
+      color: var(--accent);
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .hero-post {
+      font-size: clamp(3rem, 9vw, 7rem);
+      color: var(--white);
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 560px;
+      line-height: 1.7;
+      margin: 1.5rem auto 0;
+      font-weight: 600;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .hero-shipping {
+      margin-top: 2.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--white);
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    .hero-shipping .ship-icon {
+      font-size: 1.2rem;
+    }
+
+    .hero-shipping strong {
+      color: var(--accent);
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeUp 0.8s 0.4s ease both;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--navy-dark);
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+      padding: 0.9rem 2rem;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-light);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.06);
+      color: var(--white);
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+      padding: 0.9rem 2rem;
+      border-radius: 10px;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.12);
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.1);
+      transform: translateY(-2px);
+    }
+
+    /* ── SECTION WRAPPER ── */
+    section {
+      padding: 6rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+    }
+
+    .section-body {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.8;
+      max-width: 640px;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      margin: 0 2rem;
+    }
+
+    /* ── WHAT WE DO ── */
+    #board-games, #tcg, #news {
+      scroll-margin-top: 80px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .feature-card {
+      background: var(--navy-mid);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(200,169,110,0.25);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card h3 {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1.1rem;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.01em;
+    }
+
+    .feature-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* ── BOARD GAMES ── */
+    .bg-section {
+      background: var(--navy-mid);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .bg-section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 6rem 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .inventory-placeholder {
+      background: rgba(255,255,255,0.03);
+      border: 2px dashed rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 3rem 2rem;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .inventory-placeholder .placeholder-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .inventory-placeholder p {
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* ── TCG ── */
+    .tcg-coming {
+      margin-top: 3rem;
+      background: linear-gradient(135deg, rgba(74,96,128,0.2), rgba(38,54,72,0.4));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .tcg-coming .tcg-icon {
+      font-size: 4rem;
+      flex-shrink: 0;
+    }
+
+    .tcg-coming h3 {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .tcg-coming p {
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .badge-soon {
+      display: inline-block;
+      background: rgba(200,169,110,0.15);
+      border: 1px solid rgba(200,169,110,0.3);
+      color: var(--accent);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.75rem;
+      border-radius: 100px;
+      margin-bottom: 0.75rem;
+    }
+
+    /* ── NEWS ── */
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+      margin-top: 3rem;
+    }
+
+    .news-card-placeholder {
+      background: var(--navy-mid);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      padding: 1.5rem;
+      min-height: 160px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .news-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .news-card-placeholder h4 {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .news-card-placeholder .news-source {
+      font-size: 0.8rem;
+      color: var(--slate-light);
+      margin-top: 1rem;
+    }
+
+    /* ── ABOUT ── */
+    .about-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 6rem 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-sticky {
+      position: sticky;
+      top: 100px;
+    }
+
+    .about-name {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 2.5rem;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .about-name span { color: var(--accent); }
+
+    .about-body p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.85;
+      margin-bottom: 1.25rem;
+    }
+
+    .about-body p:last-child { margin-bottom: 0; }
+
+    /* ── NEWSLETTER ── */
+    .newsletter-section {
+      background: linear-gradient(135deg, var(--navy-mid), var(--navy));
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .newsletter-inner {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 6rem 2rem;
+      text-align: center;
+    }
+
+    .newsletter-inner .section-title { margin-bottom: 0.75rem; }
+
+    .newsletter-inner p {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 0.75rem;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .newsletter-form input {
+      flex: 1;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 0.85rem 1.25rem;
+      color: var(--white);
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .newsletter-form input::placeholder { color: var(--text-muted); }
+
+    .newsletter-form input:focus {
+      border-color: rgba(200,169,110,0.4);
+    }
+
+    .newsletter-form button {
+      background: var(--accent);
+      color: var(--navy-dark);
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 0.9rem;
+      padding: 0.85rem 1.5rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    .newsletter-form button:hover { background: var(--accent-light); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy-dark);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    footer .footer-logo {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    footer .footer-logo span { color: var(--accent); }
+
+    footer p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+
+    footer .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      list-style: none;
+      margin: 1.5rem 0;
+    }
+
+    footer .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    footer .footer-links a:hover { color: var(--accent); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 1.5rem; }
+      .nav-links a { font-size: 0.8rem; }
+
+      .bg-section-inner {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .about-section {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .about-sticky { position: static; }
+
+      .tcg-coming { flex-direction: column; text-align: center; }
+
+      .newsletter-form { flex-direction: column; }
+
+      footer .footer-links { flex-wrap: wrap; gap: 1.25rem; }
+    }
+
+    @media (max-width: 520px) {
+      .nav-links { display: none; }
+    }
+  </style>
 </head>
 <body>
 
-  <header>
-    <div class="container">
-      <h1>Board2Often</h1>
-      <nav>
-        <a href="#home">Home</a>
-        <a href="#shop">Shop</a>
-        <a href="#tcg">TCG</a>
-        <a href="#news">News</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </div>
-  </header>
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="nav-dice"></div>
+      <span class="nav-wordmark">Board2Often</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#board-games">Board Games</a></li>
+      <li><a href="#tcg">TCG <span class="coming-soon">soon</span></a></li>
+      <li><a href="#news">News</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+  </nav>
 
-  <section id="home" class="hero">
-    <div class="container">
-      <h2>Modern Board Games & Trading Card Games</h2>
-      <p>Independent tabletop retail based in Kelowna, British Columbia.</p>
-      <a class="button" href="#shop">View Inventory</a>
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-badge">Proudly Canadian — Serving Players Coast to Coast</div>
+    <h1 class="hero-title">
+      <span class="hero-pre">When You Find Yourself</span>
+      <span class="hero-brand">Board2Often</span>
+      <span class="hero-post">Play More.</span>
+    </h1>
+    <p class="hero-sub">Your go-to destination for board games, card games, and everything in between — built by gamers, for gamers.</p>
+    <div class="hero-shipping">
+      <span class="ship-icon">🚚</span>
+      <strong>Free shipping</strong>&nbsp;on orders $150+ across Canada
+    </div>
+    <div class="hero-ctas">
+      <a href="#board-games" class="btn-primary">Shop Board Games</a>
+      <a href="#about" class="btn-secondary">Our Story</a>
+    </div>
+  </div>
+
+  <!-- WHAT WE DO -->
+  <section>
+    <div class="section-label">What We're About</div>
+    <h2 class="section-title">More than a shop.<br>A community hub.</h2>
+    <p class="section-body">We believe great games deserve to be played, not just collected. Board2Often is built to get great titles into the hands of players while giving back to the community that makes this hobby so special.</p>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🎲</div>
+        <h3>Curated Board Games</h3>
+        <p>From gateway games for the family to deep strategy titles for dedicated hobbyists — handpicked with care.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🃏</div>
+        <h3>Trading Card Games</h3>
+        <p>TCGs coming soon. We're sourcing the best selection for collectors and competitive players alike.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🖨️</div>
+        <h3>3D Printed Accessories</h3>
+        <p>Custom inserts, organizers, and accessories that take your gaming experience to the next level.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📡</div>
+        <h3>Community News</h3>
+        <p>Reviews, podcasts, videos, and newsletters — curated from across the tabletop world so you don't have to go looking.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎨</div>
+        <h3>Local Designer Support</h3>
+        <p>We spotlight indie and local game designers. The next great game might be made right here in Canada.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🍁</div>
+        <h3>Canada-Wide Shipping</h3>
+        <p>We ship everywhere in Canada. Free shipping on orders $150+. No hidden fees, no surprises.</p>
+      </div>
     </div>
   </section>
 
-  <section id="shop" class="section">
-    <div class="container">
-      <h2>Shop</h2>
-      <p>Curated board games and hobby products. Full inventory coming soon.</p>
+  <div class="divider"></div>
+
+  <!-- BOARD GAMES -->
+  <div class="bg-section" id="board-games">
+    <div class="bg-section-inner">
+      <div>
+        <div class="section-label">Board Games</div>
+        <h2 class="section-title">Games for every kind of player.</h2>
+        <p class="section-body">From gateway games for the whole family to deep strategy titles for the dedicated hobbyist, we carry a curated selection of the best the tabletop world has to offer.</p>
+        <p class="section-body" style="margin-top:1rem;">New titles added regularly — check back often. Because once a week just isn't enough.</p>
+        <div style="margin-top:2rem;">
+          <a href="#newsletter" class="btn-primary">Get notified when we launch</a>
+        </div>
+      </div>
+      <div class="inventory-placeholder">
+        <div class="placeholder-icon">📦</div>
+        <p>Inventory coming soon.<br />Sign up below to be the first to know when our shelves are stocked.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TCG -->
+  <section id="tcg">
+    <div class="section-label">Trading Card Games</div>
+    <h2 class="section-title">The TCG section<br>is on its way.</h2>
+    <p class="section-body">We're working hard to bring you a great selection of trading card games. Stay tuned — exciting things are coming for the TCG community.</p>
+    <div class="tcg-coming">
+      <div class="tcg-icon">🃏</div>
+      <div>
+        <div class="badge-soon">Coming Soon</div>
+        <h3>Trading Cards & More</h3>
+        <p>Singles, sealed product, and accessories for collectors and competitive players. Sign up for our newsletter and you'll be the first to know when we go live.</p>
+      </div>
     </div>
   </section>
 
-  <section id="tcg" class="section">
-    <div class="container">
-      <h2>Trading Card Games</h2>
-      <p>Focused on sealed product, competitive releases, and long-term support.</p>
+  <div class="divider"></div>
+
+  <!-- NEWS -->
+  <section id="news">
+    <div class="section-label">Community & News</div>
+    <h2 class="section-title">Stay in the loop.</h2>
+    <p class="section-body">We round up the best reviews, video content, podcasts, and newsletters from across the tabletop world. Think of it as your hobby homepage — curated with care by a fellow enthusiast.</p>
+    <div class="news-grid">
+      <div class="news-card-placeholder">
+        <div>
+          <div class="news-tag">Review</div>
+          <h4>Latest reviews from the community dropping here</h4>
+        </div>
+        <div class="news-source">Coming soon</div>
+      </div>
+      <div class="news-card-placeholder">
+        <div>
+          <div class="news-tag">Podcast</div>
+          <h4>Top tabletop podcasts worth your commute</h4>
+        </div>
+        <div class="news-source">Coming soon</div>
+      </div>
+      <div class="news-card-placeholder">
+        <div>
+          <div class="news-tag">Video</div>
+          <h4>Watch the best unboxings, playthroughs & tutorials</h4>
+        </div>
+        <div class="news-source">Coming soon</div>
+      </div>
+      <div class="news-card-placeholder">
+        <div>
+          <div class="news-tag">Newsletter</div>
+          <h4>The week in board games — curated & delivered</h4>
+        </div>
+        <div class="news-source">Coming soon</div>
+      </div>
     </div>
   </section>
 
-  <section id="news" class="section">
-    <div class="container">
-      <h2>News</h2>
-      <p>Industry updates, product announcements, and community highlights.</p>
+  <!-- ABOUT -->
+  <div class="bg-section" id="about">
+    <div class="about-section">
+      <div class="about-sticky">
+        <div class="section-label">About Us</div>
+        <h2 class="about-name">Board<span>2</span>Often</h2>
+        <p style="color: var(--text-muted); font-size:0.9rem; line-height:1.7;">A one-person operation built on a lifelong love of the hobby.</p>
+      </div>
+      <div class="about-body">
+        <p>Some people discover board games as adults. For me, it started long before that — gathered around the family table with games that had nothing to do with Hasbro or Parker Brothers. My parents had a knack for finding the hidden gems, the ones that didn't fit neatly on mainstream shelves. Looking back, we were playing designer-style games before that even meant anything.</p>
+        <p>That love never went away. If anything, it grew — right alongside the hobby itself.</p>
+        <p>Board2Often exists because games deserve to be played, not just collected. My goal is simple: get great games into the hands of players across Canada, and build something that gives back to the community that makes this hobby so special.</p>
+        <p>That means more than just selling games. It means shining a spotlight on community projects, supporting local game designers, sharing what's happening across the tabletop world, and bringing players the kind of 3D printed inserts and accessories that take the experience to the next level.</p>
+        <p>This is a one-person operation built on a lifelong love of the hobby. And honestly? There's no other way I'd want to do it.</p>
+        <p style="font-family: 'Archivo Black', sans-serif; color: var(--accent); font-size: 1.1rem;">Welcome to Board2Often. Let's play.</p>
+      </div>
     </div>
-  </section>
+  </div>
 
-  <section id="contact" class="section">
-    <div class="container">
-      <h2>Contact</h2>
-      <p>Email: joshua@board2often.ca</p>
-      <p>Kelowna, BC</p>
+  <!-- NEWSLETTER -->
+  <div class="newsletter-section" id="newsletter">
+    <div class="newsletter-inner">
+      <div class="section-label">Stay Connected</div>
+      <h2 class="section-title">Be the first to know.</h2>
+      <p>New games, community news, TCG launches, and more. No spam — just good stuff from a fellow hobbyist.</p>
+      <form class="newsletter-form" onsubmit="return false;">
+        <input type="email" placeholder="your@email.com" />
+        <button type="submit">Subscribe</button>
+      </form>
     </div>
-  </section>
+  </div>
 
+  <!-- FOOTER -->
   <footer>
-    <div class="container">
-      <p>© 2026 Board2Often. All rights reserved.</p>
-    </div>
+    <div class="footer-logo">Board<span>2</span>Often</div>
+    <ul class="footer-links">
+      <li><a href="#board-games">Board Games</a></li>
+      <li><a href="#tcg">TCG</a></li>
+      <li><a href="#news">News</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+    <p>© 2026 Board2Often — Kelowna, BC &nbsp;·&nbsp; Serving players across Canada<br />
+    Free shipping on orders $150+ · Registration #FM1095472</p>
   </footer>
 
 </body>
